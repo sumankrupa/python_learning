@@ -34,7 +34,8 @@ create table transaction_data(
 select * from transaction_data;
 
 
+select * from orders;
 
-drop table transaction_data;
-
-drop table customer_data;
+select *
+ from customer_data c 
+left join orders o on c.customer_id = o.customer_id;
