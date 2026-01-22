@@ -39,3 +39,37 @@ select * from orders;
 select *
  from customer_data c 
 left join orders o on c.customer_id = o.customer_id;
+
+
+
+CREATE TABLE customer_master (
+    CustomerID INT NOT NULL PRIMARY KEY,
+    FirstName NVARCHAR(100) NULL,
+    LastName  NVARCHAR(100) NULL,
+    Email     NVARCHAR(255) NULL,
+    Phone     NVARCHAR(30)  NULL,
+    Address   NVARCHAR(500) NULL,
+
+    CurrentFlag BIT NOT NULL DEFAULT 1,
+    Version INT NOT NULL DEFAULT 1,
+
+    LoyaltyTier NVARCHAR(50) NULL,
+    PrevLoyaltyTier NVARCHAR(50) NULL,
+
+    SubscriptionStart DATE NULL,
+    SubscriptionEnd   DATE NULL
+  );
+
+
+
+  CREATE TABLE customer_update_stage (
+  CustomerID INT NOT NULL,
+  FirstName NVARCHAR(100) NULL,
+  LastName  NVARCHAR(100) NULL,
+  Email     NVARCHAR(255) NULL,
+  Phone     NVARCHAR(30)  NULL,
+  Address   NVARCHAR(500) NULL,
+  LoyaltyTier NVARCHAR(50) NULL,
+  SubscriptionStart DATE NULL,
+  SubscriptionEnd   DATE NULL
+);
