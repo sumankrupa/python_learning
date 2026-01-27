@@ -30,7 +30,11 @@
 # scd3 - keep current value + one previous value in the same row
 # no versions, no new rows, no current flag , no full history
 
-# steps
+# steps only if changed other wise keep the old value
 # 1. prev_value = value
 # 2. value = new_value
 
+
+
+# scd 4
+# it mo
