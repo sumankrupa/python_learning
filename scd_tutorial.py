@@ -35,6 +35,17 @@
 # 2. value = new_value
 
 
+# | Data Type    | SCD Type Used | Why                             |
+# | ------------ | ------------- | ------------------------------- |
+# | Email, Phone | **Type-1**    | We only care about latest       |
+# | Address      | **Type-2**    | We need full history            |
+# | Loyalty Tier | **Type-3**    | Keep previous value only        |
+# | Subscription | **Type-4**    | Full timeline in separate table |
 
-# scd 4
-# it mo
+
+# | SCD Type | What it does                     |
+# | -------- | -------------------------------- |
+# | Type-1   | Overwrite                        |
+# | Type-2   | New row version                  |
+# | Type-3   | Store previous value in same row |
+# | Type-4   | Separate history table           |
