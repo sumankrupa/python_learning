@@ -38,12 +38,8 @@ def main():
 
     
     data = extract(collection)
-
-    project_df,project_technologies_df,project_team_members_df,project_milestones_df = transform(data)
-
-    print("BEFORE LOAD")
-    load(engine, project_df, project_technologies_df, project_team_members_df, project_milestones_df)
-    print("AFTER LOAD")
+    project_df,project_technologies_df = transform(data)
+    load(engine,project_df,project_technologies_df)
     return
 
 
