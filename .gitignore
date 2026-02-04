@@ -1,5 +1,3 @@
-cat >> .gitignore << 'EOF'
-# Gmail OAuth secrets
 gmail_usecase/token.json
 gmail_usecase/client_secret.json
 **/token.json
