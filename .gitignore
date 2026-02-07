@@ -1,5 +1,10 @@
+# ---- Salesforce secrets ----
+salesforce_usecase/config.py
+
+# ---- Gmail / Google OAuth secrets ----
 gmail_usecase/token.json
 gmail_usecase/client_secret.json
+
+# ---- Generic secret patterns ----
 **/token.json
 **/client_secret.json
-EOF
