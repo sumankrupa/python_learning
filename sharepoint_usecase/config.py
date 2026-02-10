@@ -4,8 +4,14 @@ from urllib.parse import quote_plus
 site_url = "https://kasmoco.sharepoint.com/sites/kasmo-training"
 list_name = "Project_details"
 
+
+
+client_id = "YOUR_CLIENT_ID"
+client_secret = "YOUR_CLIENT_SECRET"
+
+
 username = "sumandhara.krupanidhi@kasmodigital.com"
-password = "SuperBood@98"
+password = "SuperBoof@98"
 
 # SQL Server
 db_config = {
@@ -22,3 +28,5 @@ connection_string = (
     f"?driver={db_config['driver'].replace(' ', '+')}"
     "&Encrypt=no"
 )
+
+
