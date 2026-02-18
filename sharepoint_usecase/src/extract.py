@@ -1,37 +1,55 @@
-from office365.sharepoint.client_context import ClientContext
-from office365.runtime.auth.client_credential import ClientCredential
-from config import site_url, list_name, client_id, client_secret
+import io
+import requests
+import pandas as pd
+from urllib.parse import urlparse, quote
 
-def extract():
-    ctx = ClientContext(site_url).with_credentials(
-        ClientCredential(client_id, client_secret)
-    )
+from config import site_url, tenant_id, client_id, client_secret, csv_path
 
-    lst = ctx.web.lists.get_by_title(list_name)
+GRAPH = "https://graph.microsoft.com/v1.0"
 
-    items = (
-        lst.items
-        .select([
-            "Title", "Status", "Project_x0020_Manager",
-            "Start_x0020_Date", "End_x0020_Date",
-            "Budget", "Department"
-        ])
-        .get()
-        .execute_query()
-    )
 
-    rows = []
-    for it in items:
-        p = it.properties
-        rows.append({
-            "project_name": p.get("Title"),
-            "status": p.get("Status"),
-            "project_manager": p.get("Project_x0020_Manager"),
-            "start_date": p.get("Start_x0020_Date"),
-            "end_date": p.get("End_x0020_Date"),
-            "budget": p.get("Budget"),
-            "department": p.get("Department"),
-        })
+def _get_token() -> str:
+    token_url = f"https://login.microsoftonline.com/{tenant_id}/oauth2/v2.0/token"
+    data = {
+        "client_id": client_id,
+        "client_secret": client_secret,
+        "grant_type": "client_credentials",
+        "scope": "https://graph.microsoft.com/.default",
+    }
+    r = requests.post(token_url, data=data, timeout=30)
+    r.raise_for_status()
+    return r.json()["access_token"]
 
-    print("extract done")
-    return rows
+
+def _headers(token: str) -> dict:
+    return {"Authorization": f"Bearer {token}"}
+
+
+def _get_site_id(token: str) -> str:
+    u = urlparse(site_url)
+    hostname = u.hostname
+    path = u.path.rstrip("/")
+    url = f"{GRAPH}/sites/{hostname}:{path}"
+    r = requests.get(url, headers=_headers(token), timeout=30)
+    r.raise_for_status()
+    return r.json()["id"]
+
+
+def extract() -> pd.DataFrame:
+    token = _get_token()
+    site_id = _get_site_id(token)
+
+    # Documents library is a drive in Graph
+    drive = requests.get(f"{GRAPH}/sites/{site_id}/drive", headers=_headers(token), timeout=30)
+    drive.raise_for_status()
+    drive_id = drive.json()["id"]
+
+    item_path = quote(csv_path)
+    content_url = f"{GRAPH}/drives/{drive_id}/root:/{item_path}:/content"
+
+    resp = requests.get(content_url, headers=_headers(token), timeout=60)
+    resp.raise_for_status()
+
+    df = pd.read_csv(io.BytesIO(resp.content))
+    print("extract done:", df.shape)
+    return df

@@ -2,12 +2,12 @@ from urllib.parse import quote_plus
 
 # SharePoint
 site_url = "https://kasmoco.sharepoint.com/sites/kasmo-training"
-list_name = "Project_details"
+csv_path = "Shared Documents/sumandhara/order_data.csv"
 
 
-
-client_id = "YOUR_CLIENT_ID"
-client_secret = "YOUR_CLIENT_SECRET"
+tenant_id = "979ffdff-332b-406c-8644-6d8db569225f"
+client_id = "PUT-GUID-HERE"
+client_secret = "PUT-SECRET-HERE"
 
 
 username = "sumandhara.krupanidhi@kasmodigital.com"
